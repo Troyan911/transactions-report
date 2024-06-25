@@ -10,20 +10,20 @@ class Transaction extends Model
 {
     use HasFactory;
 
-    public $timestamps = true;
-
     protected $fillable = [
         'id',
         'timestamp',
         'type',
         'amount',
+        'created_at',
+        'updated_at',
     ];
 
     //    public function transactionType(): BelongsTo
     //    {
     //        return $this->belongsTo(TransactionType::class);
     //    }
-    //
+
     //    public function scopeDateFrom($query, $dateFrom)
     //    {
     //        return $query->where('timestamp', '>=', $dateFrom);
@@ -33,12 +33,7 @@ class Transaction extends Model
     //    {
     //        return $query->where('timestamp', '<=', $dateTo);
     //    }
-    //
-    //    public function scopeDateFrom($query, $dateFrom)
-    //    {
-    //        return $query->where('timestamp', '>=', $dateFrom);
-    //    }
-    //
+
     //    public function scopeBetweenDates($query, $start, $end)
     //    {
     //        return $query->whereBetween('timestamp', [$start, $end]);

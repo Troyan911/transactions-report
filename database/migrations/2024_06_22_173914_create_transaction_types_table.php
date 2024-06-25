@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('type', 50)->unique();
             $table->string('debit', 20);
             $table->string('credit', 20);
-            $table->boolean('pnl');
             $table->string('cash_operation', 20)->nullable();
         });
     }

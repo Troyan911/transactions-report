@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
-use App\Repositories\ReportRepository;
-use App\Repositories\ReportRepositoryContract;
+use App\Services\Contracts\ImportCsvServiceContract;
+use App\Services\Contracts\ReportServiceContract;
+use App\Services\ImportCsvService;
+use App\Services\ReportService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -13,7 +15,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind(ReportRepositoryContract::class, ReportRepository::class);
+        $this->app->bind(ReportServiceContract::class, ReportService::class);
+        $this->app->bind(ImportCsvServiceContract::class, ImportCsvService::class);
     }
 
     /**

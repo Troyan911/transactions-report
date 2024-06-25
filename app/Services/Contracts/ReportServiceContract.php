@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Services\Contracts;
 
 use Illuminate\Http\Request;
 
-interface ReportRepositoryContract
+interface ReportServiceContract
 {
     public function getPnlData(Request $request): array;
 

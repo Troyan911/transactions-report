@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Transaction;
-use App\Repositories\ReportRepositoryContract;
+use App\Services\Contracts\ReportServiceContract;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class ReportController extends Controller
 {
@@ -15,22 +13,15 @@ class ReportController extends Controller
         //todo
     }
 
-    /**
-     * @param Request $request
-     * @param ReportRepositoryContract $repository
-     * @return JsonResponse
-     */
-    public function cashFlows(Request $request, ReportRepositoryContract $repository): JsonResponse
+    public function cashFlows(Request $request, ReportServiceContract $repository): JsonResponse
     {
         return response()->json($repository->getCashFlowData($request));
     }
 
     /**
-     * @param Request $request
-     * @param ReportRepositoryContract $repository
      * @return JsonResponse
      */
-    public function pnl(Request $request, ReportRepositoryContract $repository)
+    public function pnl(Request $request, ReportServiceContract $repository)
     {
         return response()->json($repository->getPnlData($request));
     }

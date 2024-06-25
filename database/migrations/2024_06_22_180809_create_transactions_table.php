@@ -17,9 +17,6 @@ return new class extends Migration
             $table->string('type');
             $table->float('amount', 2);
             $table->timestamps();
-
-//            $table->foreign('type')->references('type')->on('transaction_types')->noActionOnDelete()->noActionOnUpdate();
-
         });
     }
 

@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Services;
 
 use App\Enums\CashType;
 use App\Enums\OperationType;
 use App\Models\Transaction;
+use App\Services\Contracts\ReportServiceContract;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class ReportRepository implements ReportRepositoryContract
+class ReportService implements ReportServiceContract
 {
     public function getCashFlowData(Request $request): array
     {
@@ -52,8 +53,8 @@ class ReportRepository implements ReportRepositoryContract
         $startDate = $request->exists('start_date') ? $request->input('start_date') : Transaction::min('timestamp');
         $endDate = $request->exists('end_date') ? $request->input('end_date') : now()->format('Y-m-d H:i:s');
 
-        $debitVals = '"'.implode('","', $this->enumArrToNameArr($debitCodes)).'"';
-        $creditVals = '"'.implode('","', $this->enumArrToNameArr($creditCodes)).'"';
+        $debitCodesVals = '"'.implode('","', $this->enumArrToNameArr($debitCodes)).'"';
+        $creditCodesVals = '"'.implode('","', $this->enumArrToNameArr($creditCodes)).'"';
 
         //todo between
 
@@ -61,13 +62,13 @@ class ReportRepository implements ReportRepositoryContract
         FROM (
                 SELECT t.amount, tt.debit as code, tt.cash_operation FROM transactions t
                 LEFT JOIN transaction_types tt ON tt.type = t.type
-                    AND timestamp >= ? AND timestamp < ?
-                WHERE tt.debit IN ($debitVals)
+                    AND timestamp BETWEEN ? AND ?
+                WHERE tt.debit IN ($debitCodesVals)
                 UNION ALL
                 SELECT -t.amount, tt.credit, tt.cash_operation FROM transactions t
                 LEFT JOIN transaction_types tt ON tt.type = t.type
-                    AND timestamp >= ? AND timestamp < ?
-                WHERE tt.credit IN ($creditVals)
+                    AND timestamp BETWEEN ? AND ?
+                WHERE tt.credit IN ($creditCodesVals)
             ) trt
         GROUP BY $fieldForGrouping";
 
