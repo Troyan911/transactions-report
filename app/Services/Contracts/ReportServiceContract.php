@@ -2,11 +2,13 @@
 
 namespace App\Services\Contracts;
 
-use Illuminate\Http\Request;
-
 interface ReportServiceContract
 {
-    public function getPnlData(Request $request): array;
+    public function getPnl(array $period): array;
 
-    public function getCashFlowData(Request $request): array;
+    public function getCashFlow(array $period): array;
+
+    public function getBalanceChanges(array $period): array;
+
+    public function getBalance(array $period): array;
 }
