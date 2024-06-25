@@ -11,8 +11,6 @@ Install commands:
 
 - <p>sail up -d</p>
 - <p>sail a migrate</p>
-- <p>sail a import:csv test-data.csv</p>
-
 - <p>sail a import:types transaction-types.csv</p>
 - <p>sail a import:transactions test-data.csv</p>
 
