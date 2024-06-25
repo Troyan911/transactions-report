@@ -56,8 +56,6 @@ class ReportService implements ReportServiceContract
         $debitCodesVals = '"'.implode('","', $this->enumArrToNameArr($debitCodes)).'"';
         $creditCodesVals = '"'.implode('","', $this->enumArrToNameArr($creditCodes)).'"';
 
-        //todo between
-
         $sql = "SELECT SUM(trt.amount) as amount, $fieldForGrouping as code
         FROM (
                 SELECT t.amount, tt.debit as code, tt.cash_operation FROM transactions t

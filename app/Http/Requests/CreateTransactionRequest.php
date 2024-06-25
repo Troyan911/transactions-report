@@ -26,7 +26,7 @@ class CreateTransactionRequest extends FormRequest
         return [
             'timestamp' => ['required', 'date', 'before_or_equal:'.Carbon::now()->toDateTimeString()],
             'type' => ['required', 'string', 'exists:'.TransactionType::class.',type'],
-            'amount' => ['required', 'numeric', 'min:1'],
+            'amount' => ['required', 'numeric', 'min:0'],
         ];
     }
 }
