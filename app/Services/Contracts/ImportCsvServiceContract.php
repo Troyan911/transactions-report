@@ -4,5 +4,6 @@ namespace App\Services\Contracts;
 
 interface ImportCsvServiceContract
 {
-    public function importTransaction(string $filepath);
+    public function importTransactions(string $filepath);
+    public function importTransactionTypes(string $filepath);
 }

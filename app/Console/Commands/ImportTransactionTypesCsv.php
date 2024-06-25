@@ -5,14 +5,14 @@ namespace App\Console\Commands;
 use App\Services\Contracts\ImportCsvServiceContract;
 use Illuminate\Console\Command;
 
-class ImportCsv extends Command
+class ImportTransactionTypesCsv extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'import:csv {path}';
+    protected $signature = 'import:types {path}';
 
     /**
      * The console command description.
@@ -37,7 +37,7 @@ class ImportCsv extends Command
             return 1;
         }
 
-        $result = $csvService->importTransaction($path);
+        $result = $csvService->importTransactionTypes($path);
 
         if ($result == 0) {
             $this->info('File imported successfully!');

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\TransactionType;
 use App\Services\Contracts\ImportCsvServiceContract;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -17,7 +18,7 @@ class ImportCsvService implements ImportCsvServiceContract
      * @throws Exception
      * @throws UnavailableStream
      */
-    public function importTransaction(string $filepath)
+    public function importTransactions(string $filepath)
     {
         $csv = Reader::createFromPath($filepath, 'r');
         $csv->setHeaderOffset(0);
@@ -62,4 +63,33 @@ class ImportCsvService implements ImportCsvServiceContract
 
         return 0;
     }
+
+    public function importTransactionTypes(string $filepath)
+    {
+        $csv = Reader::createFromPath($filepath, 'r');
+        $csv->setHeaderOffset(0);
+
+        $records = $csv->getRecords();
+
+        DB::table('transaction_types')->truncate();
+        DB::beginTransaction();
+        $header = $csv->getHeader();
+
+        try {
+            foreach ($records as $record) {
+                $row = array_combine($header, $record);
+                TransactionType::create($row);
+            }
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            logs()->error($e->getMessage());
+
+            return 1;
+        }
+
+        return 0;
+    }
+
 }
