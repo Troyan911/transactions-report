@@ -40,8 +40,12 @@ class ReportController extends Controller
 
     private function setPeriod(Request $request): array
     {
-        $start_date = $request->exists('start_date') ? $request->input('start_date') : Transaction::min('timestamp');
-        $end_date = $request->exists('end_date') ? $request->input('end_date') : now()->format('Y-m-d H:i:s');
+        $start_date = $request->exists('start_date')
+            ? $request->input('start_date')
+            : Transaction::min('timestamp');
+        $end_date = $request->exists('end_date')
+            ? (new DateTime($request->input('end_date')))->setTime(23, 59, 59)->format('Y-m-d H:i:s')
+            : now()->format('Y-m-d H:i:s');
 
         return compact('start_date', 'end_date');
     }
