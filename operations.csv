@@ -1,0 +1,15 @@
+id,code,name,description,debit,credit
+1,CASH,cash,increased by debit,1,-1
+2,ACC,accounts_receivable,increased by debit,1,-1
+3,BAD,bad_debt,increased by debit,1,-1
+4,PPE,property_plant_equip,increased by debit,1,-1
+5,OA,other_assets,increased by debit,1,-1
+6,SAL,salaries_payable,increased by credit,-1,1
+7,PAY,accounts_payable,increased by credit,-1,1
+8,DEBT,debt,increased by credit,-1,1
+9,ALL,allowance,increased by credit,-1,1
+10,EQ,share_equity,increased by credit,-1,1
+11,REV,revenue,increased by credit,-1,1
+12,COS,cost_of_sales,increased by debit,1,-1
+13,EXP,expenditures,increased by debit,1,-1
+14,DIV,dividends,increased by debit,1,-1
