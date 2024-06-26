@@ -1,10 +1,12 @@
 
 <h3>Transaction report app</h3>
-<h5>Short how to</h5>
+<h5>Short "how to"</h5>
+
+Copy .env file to project directory <br>
 
 If sail already installed, got to step with sail up
 
-Install commands:
+Console commands: 
 - <p>composer require laravel/sail --dev</p>
 - <p>php artisan sail:install</p>
 - <p>alias sail='[ -f sail ] && sh sail || sh vendor/bin/sail'</p>
