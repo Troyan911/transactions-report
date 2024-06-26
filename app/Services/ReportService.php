@@ -112,28 +112,6 @@ class ReportService implements ReportServiceContract
 
         $operationTypeCodesVals = '"'.implode('","', $this->enumArrToNameArr($operationTypeCodes)).'"';
 
-        //        $sql = "SELECT SUM(trt.amount) as amount, $fieldForGrouping as code
-        //        FROM (
-        //            SELECT t.amount * ot.debit as amount,
-        //                   tt.debit as code,
-        //                   tt.cash_operation
-        //            FROM transactions t
-        //            LEFT JOIN transaction_types tt ON tt.type = t.type
-        //                AND timestamp BETWEEN ? AND ?
-        //            LEFT JOIN operation_types ot ON tt.debit = ot.code
-        //            WHERE tt.debit IN ($operationTypeCodesVals)
-        //            UNION ALL
-        //            SELECT t.amount * ot.credit as amount,
-        //                   tt.credit as code,
-        //                   tt.cash_operation
-        //            FROM transactions t
-        //            LEFT JOIN transaction_types tt ON tt.type = t.type
-        //                AND timestamp BETWEEN ? AND ?
-        //            LEFT JOIN operation_types ot ON tt.credit = ot.code
-        //            WHERE tt.credit IN ($operationTypeCodesVals)
-        //            ) trt
-        //        GROUP BY $fieldForGrouping";
-
         $sql = "SELECT SUM(trt.amount) as amount, $fieldForGrouping as code
         FROM (
             SELECT t.amount * ot.debit as amount,
