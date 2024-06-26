@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\OperationType;
 use App\Models\TransactionType;
 use App\Services\Contracts\ImportCsvServiceContract;
 use Illuminate\Support\Carbon;
@@ -92,4 +93,31 @@ class ImportCsvService implements ImportCsvServiceContract
         return 0;
     }
 
+    public function importOperationTypes(string $filepath)
+    {
+        $csv = Reader::createFromPath($filepath, 'r');
+        $csv->setHeaderOffset(0);
+
+        $records = $csv->getRecords();
+
+        DB::table('operation_types')->truncate();
+        DB::beginTransaction();
+        $header = $csv->getHeader();
+
+        try {
+            foreach ($records as $record) {
+                $row = array_combine($header, $record);
+                OperationType::create($row);
+            }
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            logs()->error($e->getMessage());
+
+            return 1;
+        }
+
+        return 0;
+    }
 }

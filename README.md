@@ -13,10 +13,11 @@ Install commands:
 - <p>sail a migrate</p>
 - <p>sail a import:types transaction-types.csv</p>
 - <p>sail a import:transactions test-data.csv</p>
+- <p>sail a import:operations operations.csv</p>
 
 Available routes:
-- GET   	api/balance [fix WIP]
-- GET   	api/balance_changes [fix WIP]
-- GET   	api/cash_flows
-- GET   	api/pnl
-- POST	api/transaction_create
+- GET   	api/balance?date=2024-06-09
+- GET   	api/balance_changes?start_date=2024-06-10 00:00:00&end_date=2024-07-22 00:00:00
+- GET   	api/cash_flows?start_date=2024-06-10 00:00:00&end_date=2024-07-22 00:00:00
+- GET   	api/pnl?start_date=2024-06-10 00:00:00&end_date=2024-07-22 00:00:00
+- POST	api/transaction_create <br>body: <br>{"timestamp": "2022-06-24 21:57:20", "type": "EXPENDITURE", "amount": "100"}

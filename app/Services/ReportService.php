@@ -54,8 +54,7 @@ class ReportService implements ReportServiceContract
             $resultValues[OType::SAL->value]
             + $resultValues[OType::PAY->value]
             + $resultValues[OType::DEBT->value]
-            + $resultValues[OType::ALL->value]
-            + $resultValues[OType::EQ->value];
+            + $resultValues[OType::ALL->value];
 
         //        undivided_profit Take value from PnL for the same period
         $pnlData = $this->getPnl($period);
@@ -96,7 +95,7 @@ class ReportService implements ReportServiceContract
         //Calc additional PnL values
         $resultValues['operational_profit'] = $resultValues[OType::REV->value] - $resultValues[OType::COS->value];
         $resultValues['total_costs'] = $resultValues[OType::EXP->value] + $resultValues[OType::COS->value];
-        $resultValues['net_profit'] = $resultValues[OType::REV->value] - $resultValues['total_costs'];
+        $resultValues['net_profit'] = $resultValues[OType::REV->value] - ($resultValues[OType::EXP->value] + $resultValues[OType::COS->value]);
         $resultValues['undivided_profit'] = $resultValues['net_profit'] - $resultValues[OType::DIV->value];
 
         return $resultValues;
@@ -113,17 +112,47 @@ class ReportService implements ReportServiceContract
 
         $operationTypeCodesVals = '"'.implode('","', $this->enumArrToNameArr($operationTypeCodes)).'"';
 
+        //        $sql = "SELECT SUM(trt.amount) as amount, $fieldForGrouping as code
+        //        FROM (
+        //            SELECT t.amount * ot.debit as amount,
+        //                   tt.debit as code,
+        //                   tt.cash_operation
+        //            FROM transactions t
+        //            LEFT JOIN transaction_types tt ON tt.type = t.type
+        //                AND timestamp BETWEEN ? AND ?
+        //            LEFT JOIN operation_types ot ON tt.debit = ot.code
+        //            WHERE tt.debit IN ($operationTypeCodesVals)
+        //            UNION ALL
+        //            SELECT t.amount * ot.credit as amount,
+        //                   tt.credit as code,
+        //                   tt.cash_operation
+        //            FROM transactions t
+        //            LEFT JOIN transaction_types tt ON tt.type = t.type
+        //                AND timestamp BETWEEN ? AND ?
+        //            LEFT JOIN operation_types ot ON tt.credit = ot.code
+        //            WHERE tt.credit IN ($operationTypeCodesVals)
+        //            ) trt
+        //        GROUP BY $fieldForGrouping";
+
         $sql = "SELECT SUM(trt.amount) as amount, $fieldForGrouping as code
         FROM (
-                SELECT t.amount, tt.debit as code, tt.cash_operation FROM transactions t
-                LEFT JOIN transaction_types tt ON tt.type = t.type
-                    AND timestamp BETWEEN ? AND ?
-                WHERE tt.debit IN ($operationTypeCodesVals)
-                UNION ALL
-                SELECT -t.amount, tt.credit, tt.cash_operation FROM transactions t
-                LEFT JOIN transaction_types tt ON tt.type = t.type
-                    AND timestamp BETWEEN ? AND ?
-                WHERE tt.credit IN ($operationTypeCodesVals)
+            SELECT t.amount * ot.debit as amount,
+                   tt.debit as code,
+                   tt.cash_operation
+            FROM transactions t
+            LEFT JOIN transaction_types tt ON tt.type = t.type
+            LEFT JOIN operation_types ot ON tt.debit = ot.code
+            WHERE t.timestamp between ? AND ?
+              AND tt.debit IN ($operationTypeCodesVals)
+            UNION ALL
+            SELECT t.amount * ot.credit as amount,
+                   tt.credit as code,
+                   tt.cash_operation
+            FROM transactions t
+            LEFT JOIN transaction_types tt ON tt.type = t.type
+            LEFT JOIN operation_types ot ON tt.credit = ot.code
+            WHERE t.timestamp between ? AND ?
+            AND tt.credit IN ($operationTypeCodesVals)
             ) trt
         GROUP BY $fieldForGrouping";
 

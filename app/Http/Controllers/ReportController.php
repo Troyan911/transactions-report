@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Transaction;
 use App\Services\Contracts\ReportServiceContract;
+use DateTime;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -48,7 +49,10 @@ class ReportController extends Controller
     private function setPeriodFromStartToDate(Request $request): array
     {
         $start_date = Transaction::min('timestamp');
-        $end_date = $request->exists('date') ? $request->input('date') : now()->format('Y-m-d H:i:s');
+
+        $end_date = $request->exists('date')
+            ? (new DateTime($request->input('date')))->setTime(23, 59, 59)->format('Y-m-d H:i:s')
+            : now()->format('Y-m-d H:i:s');
 
         return compact('start_date', 'end_date');
     }
